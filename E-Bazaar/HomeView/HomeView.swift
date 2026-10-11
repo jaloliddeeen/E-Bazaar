@@ -190,12 +190,15 @@ struct ProductCardView: View {
                 NavigationLink {
                     ProductDetailsView(product: product)
                 } label: {
-                    Image(product.imageName)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 160)
-                        .frame(width: .infinity)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    ZStack {
+                        Color(.systemGray6)
+                        Image(product.imageName)
+                            .resizable()
+                            .scaledToFill()
+                    }
+                    .frame(height: 160)
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
                 .buttonStyle(.plain)
                 
@@ -220,11 +223,7 @@ struct ProductCardView: View {
                     
                     Spacer()
                     
-                    Button(action: {} ) {
-                        Image(systemName: "heart")
-                            .font(.title3)
-                            .foregroundColor(.black)
-                    }
+                    FavoriteButton(product: product)
                 }
                 .padding(8)
             }
@@ -278,16 +277,33 @@ struct ProductCardView: View {
     }
 }
 
+struct FavoriteButton: View {
+    let product: Product
+    @EnvironmentObject var wishlist: WishlistStore
+    
+    var body: some View {
+        Button {
+            wishlist.toggle(product)
+        } label: {
+            Image(systemName: wishlist.contains(product) ? "heart.fill" : "heart")
+                .font(.title3)
+                .foregroundColor(wishlist.contains(product) ? .red : .black)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 
 struct MainTabView: View {
     @StateObject private var cart = CartStore()
     @StateObject private var wishlist = WishlistStore()
-    
-    @State private var selectedTab = 0
+        
+    @EnvironmentObject var router: AppRouter
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            HomeView(selectedTab: $selectedTab)
+        TabView(selection: $router.selectedTab) {
+            
+            HomeView(selectedTab: $router.selectedTab)
                 .tabItem {
                     Label("Home", systemImage: "storefront")
                 }
@@ -301,7 +317,7 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
-            NavigationStack {
+            NavigationStack(path: $router.cartPath) {
                 CartView()
             }
                 .tabItem {
@@ -310,13 +326,17 @@ struct MainTabView: View {
                 .badge(cart.totalItems == 0 ? nil : String(cart.totalItems))
                 .tag(2)
                         
-            Text("Wishlist")
+            NavigationStack {
+                WishlistView()
+            }
                 .tabItem {
                     Label("Wishlist", systemImage: "heart")
                 }
                 .tag(3)
             
-            Text("Profile")
+            NavigationStack {
+                ProfileView()
+            }
                 .tabItem {
                     Label("Profile", systemImage: "person")
                 }
@@ -325,9 +345,11 @@ struct MainTabView: View {
         .tint(Color.blue)
         .environmentObject(cart)
         .environmentObject(wishlist)
+        
     }
 }
 
 #Preview {
     MainTabView()
+        .environmentObject(AppRouter())
 }

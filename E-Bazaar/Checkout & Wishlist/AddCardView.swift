@@ -126,7 +126,7 @@ struct AddCardView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(isValid ? Color.accentColor : Color(.systemGray4))
+                .background(isValid ? Color.navyBlue : Color(.systemGray4))
                 .clipShape(Capsule())
         }
         .disabled(!isValid)

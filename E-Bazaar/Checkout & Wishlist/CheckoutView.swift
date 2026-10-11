@@ -196,7 +196,7 @@ struct CheckoutView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(deliveryAddress != nil && paymentCard != nil ? Color.accentColor : Color(.systemGray4))
+                .background(deliveryAddress != nil && paymentCard != nil ? Color.navyBlue : Color(.systemGray4))
                 .clipShape(Capsule())
         }
         .disabled(deliveryAddress == nil || paymentCard == nil)

@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct DeliveryAddress: Hashable {
+struct DeliveryAddress: Hashable, Identifiable {
+    var id: UUID = UUID()
     let street: String
     let district: String
     let region: String
@@ -15,6 +16,7 @@ struct DeliveryAddress: Hashable {
     let postcode: String
     let fullName: String
     let phoneNumber: String
+    var isDefault: Bool = false
     
     var formattedString: String {
         "\(street), \(district), \(region), \(country), \(postcode)"
@@ -22,6 +24,7 @@ struct DeliveryAddress: Hashable {
 }
 
 struct AddAddressSheet: View {
+    var addressToEdit: DeliveryAddress? = nil
     var onSave: (DeliveryAddress) -> Void
     
     @Environment(\.dismiss) private var dismiss
@@ -142,6 +145,18 @@ struct AddAddressSheet: View {
                     selection: $district
                 )
             }
+            
+            .onAppear {
+                if let address = addressToEdit {
+                    countryName = address.country
+                    region = address.region
+                    district = address.district
+                    street = address.street
+                    postcode = address.postcode
+                    fullName = address.fullName
+                    phoneNumber = address.phoneNumber
+                }
+            }
         }
     }
     
@@ -164,7 +179,7 @@ struct AddAddressSheet: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(isValid ? Color.accentColor : Color(.systemGray4))
+                .background(isValid ? Color.navyBlue : Color(.systemGray4))
                 .clipShape(Capsule())
         }
         .disabled(!isValid)

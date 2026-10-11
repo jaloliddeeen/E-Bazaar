@@ -132,7 +132,7 @@ struct CheckoutStatusOverlay: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Color.accentColor, in: Capsule())
+                        .background(Color.navyBlue, in: Capsule())
                 }
                 
                 Button(action: onSecondaryAction) {
@@ -198,7 +198,7 @@ struct CheckoutStatusOverlay: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Color.accentColor, in: Capsule())
+                        .background(Color.navyBlue, in: Capsule())
                 }
                 
                 Button(action: onSecondaryAction) {

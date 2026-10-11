@@ -15,6 +15,16 @@ final class CartStore: ObservableObject {
     @Published private(set) var selectedIDs: Set<UUID> = []
     @Published private(set) var variants: [UUID: (color: String, size: String)] = [:]
     
+    @Published var items: [CartView] = []
+    
+    func clearCart() {
+        quantities.removeAll()
+        products.removeAll()
+        selectedIDs.removeAll()
+        variants.removeAll()
+        items.removeAll()
+    }
+    
     var totalItems: Int {
         quantities.values.reduce(0, +)
     }

@@ -12,10 +12,11 @@ struct HomeTabBar: View {
     
     var body: some View {
         HStack(spacing: 16) {
-            Image("app_logo")
+            Image("appIcon2")
                 .resizable()
                 .scaledToFit()
-                .frame(height: 32)
+                .frame(height: 16)
+                .padding(.horizontal, 10)
                 .accessibilityLabel("E-Bazaar")
             
             Spacer()

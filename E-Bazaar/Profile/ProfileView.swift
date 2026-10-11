@@ -11,9 +11,22 @@ struct ProfileView: View {
     @State private var unreadMessagesCount = 1
     @State private var savedAddressesCount = 2
     @State private var linkedCardsCount = 2
-    @State private var activeOrders: [Order] = [
-        Order(id: "6352", status: "Preparation", imageName: "product5")
-    ]
+    
+    @State private var activeOrders: [CustomerOrder] = [
+            CustomerOrder(
+                id: "6352",
+                status: .initialPreparation,
+                statusDescription: "The seller has confirmed your order – he is already collecting the parcel",
+                estimatedDelivery: "Until October 23",
+                deliveryAddress: "Ölrainstraße 9, Bregenz, Vorarlberg, Austria, 6900",
+                tab: .active,
+                items: [
+                    OrderItem(title: "Teapot Kukmara stainless steel, with a Whistle, 3 liters", price: 10.99, quantity: 1, color: "Black", size: "36-48", imageName: "mug.fill")
+                ],
+                discount: 0.56,
+                deliveryCost: 16.78
+            )
+        ]
     
     
     var body: some View {
@@ -32,13 +45,13 @@ struct ProfileView: View {
                 
                 Section {
                     NavigationLink {
-                        OrdersListView()
+                        OrderListView()
                     } label: {
                         Label("Orders", systemImage: "cube.box")
                     }
                     
                     NavigationLink {
-                        MessagesView()
+                        ChatListView()
                     } label: {
                         HStack {
                             Label("Messages", systemImage: "message")
@@ -126,29 +139,40 @@ struct ProfileView: View {
     
     private var activeOrdersCarousel: some View {
         ForEach(activeOrders) { order in
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Order ID - \(order.id)")
-                        .font(.subheadline.bold())
+            NavigationLink {
+                OrderDetailView(order: order)
+            } label: {
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Order ID - \(order.id)")
+                            .font(.subheadline.bold())
+                            .foregroundStyle(.primary)
+                        
+                        Text(order.status.rawValue)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(order.status.tintColor)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(order.status.tintColor.opacity(0.15), in: Capsule())
+                    }
                     
-                    Text(order.status)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(Color.accentColor)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color.accentColor.opacity(0.15), in: Capsule())
+                    Spacer()
+                    
+                    if let firstItem = order.items.first {
+                        Image(systemName: firstItem.imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 28, height: 28)
+                            .padding(10)
+                            .foregroundStyle(Color.accentColor)
+                            .background(Color(.secondarySystemBackground))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
                 }
-                
-                Spacer()
-                
-                Image(order.imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                .padding(.vertical, 4)
             }
-            .padding(.vertical, 4)
         }
+            
     }
     
 }
@@ -158,36 +182,6 @@ struct Order: Identifiable {
     let id: String
     let status: String
     let imageName: String
-}
-
-
-struct OrdersListView: View {
-    var body: some View {
-        Text("Orders View")
-    }
-}
-
-
-struct MessagesView: View {
-    var body: some View {
-        Text("Messages View")
-    }
-}
-
-
-
-struct NotificationSettingsView: View {
-    var body: some View {
-        Text("Orders View")
-    }
-}
-
-
-
-struct DeliveryAddressesView: View {
-    var body: some View {
-        Text("Orders View")
-    }
 }
 
 

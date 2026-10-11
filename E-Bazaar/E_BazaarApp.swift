@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct E_BazaarApp: App {
+    @StateObject private var router = AppRouter()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreen()
+                .environmentObject(router)
         }
     }
 }

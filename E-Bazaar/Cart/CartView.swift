@@ -7,8 +7,13 @@
 
 import SwiftUI
 
+enum CartRoute: Hashable {
+    case checkout(total: Double)
+}
+
 struct CartView: View {
     @EnvironmentObject private var cart: CartStore
+    @EnvironmentObject var router: AppRouter
     @State private var isShowingCheckout = false
     
     var body: some View {
@@ -48,7 +53,7 @@ struct CartView: View {
         .listStyle(.insetGrouped)
         .safeAreaInset(edge: .bottom, spacing: 0) { checkoutBar }
         .navigationDestination(isPresented: $isShowingCheckout) {
-            CheckoutView()
+            CheckoutView(total: cart.overall)
         }
     }
     
@@ -167,17 +172,31 @@ struct QuantityStepper: View {
 
 
 final class WishlistStore: ObservableObject {
-    @Published var productIDs: Set<Product.ID> = []
+    @Published private(set) var products: [UUID: Product] = [:]
     
-    func toggle(_ product: Product) {
-            if productIDs.contains(product.id) {
-                productIDs.remove(product.id)
-            } else {
-                productIDs.insert(product.id)
-            }
-        }
+    var items: [Product] {
+        Array(products.values)
+    }
+    
+    func contains(_ product: Product) -> Bool {
+        products[product.id] != nil
+    }
+    
+    func add(_ product: Product) {
+        products[product.id] = product
+    }
 
-    func contains(_ product: Product) -> Bool { productIDs.contains(product.id) }
+    func remove(_ product: Product) {
+        products[product.id] = nil
+    }
+
+    func toggle(_ product: Product) {
+        if contains(product) {
+            remove(product)
+        } else {
+            add(product)
+        }
+    }    
 }
 
 

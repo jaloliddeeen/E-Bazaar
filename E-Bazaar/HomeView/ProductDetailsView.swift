@@ -12,7 +12,8 @@ struct ProductDetailsView: View {
     let product: Product
     
     @EnvironmentObject private var cart: CartStore
-    @State private var isFavorite = false
+    @EnvironmentObject private var wishlist: WishlistStore
+    
     @State private var selectedColor = "Grey"
     @State private var selectedSize = "M"
     @State private var quantity = 1
@@ -38,14 +39,13 @@ struct ProductDetailsView: View {
         .toolbar(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button { isFavorite.toggle() } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                }
-                .accessibilityLabel(isFavorite ? "Remove from wishlist" : "Add to wishlist")
+                FavoriteButton(product: product)
+                    .accessibilityLabel(wishlist.contains(product) ? "Remove from wishlist" : "Add to wishlist")
                 
                 ShareLink(item: productShareText) {
                     Image(systemName: "square.and.arrow.up")
                 }
+                .foregroundColor(.black)
                 .accessibilityLabel("Share item")
             }
         }
@@ -262,4 +262,5 @@ struct ProductDetailsView: View {
         )
     }
     .environmentObject(CartStore())
+    .environmentObject(WishlistStore())
 }
