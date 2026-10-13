@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum OrderTab: String, CaseIterable, Identifiable {
+enum OrderTab: String, CaseIterable, Identifiable, Codable {
     case active = "Active"
     case archive = "Archive"
     case dispute = "Dispute"
@@ -15,7 +15,7 @@ enum OrderTab: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-enum OrderStatus: String, CaseIterable {
+enum OrderStatus: String, CaseIterable, Codable {
     case initialPreparation = "Initial preparation"
     case processingPayment = "Processing the payment"
     case waitingForPayment = "Waiting for payment"
@@ -39,8 +39,8 @@ enum OrderStatus: String, CaseIterable {
     }
 }
 
-struct OrderItem: Identifiable, Hashable {
-    let id = UUID()
+struct OrderItem: Identifiable, Hashable, Codable {
+    var id = UUID()
     let title: String
     let price: Double
     let quantity: Int
@@ -49,7 +49,7 @@ struct OrderItem: Identifiable, Hashable {
     let imageName: String
 }
 
-struct CustomerOrder: Identifiable, Hashable {
+struct CustomerOrder: Identifiable, Hashable, Codable {
     let id: String
     let status: OrderStatus
     let statusDescription: String

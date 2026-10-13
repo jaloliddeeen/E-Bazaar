@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum CheckoutStatus: Identifiable, Equatable {
+enum CheckoutStatus: Identifiable, Equatable, Codable {
     case awaiting
     case success(estimatedDelivery: String)
     case error(message: String, code: String)

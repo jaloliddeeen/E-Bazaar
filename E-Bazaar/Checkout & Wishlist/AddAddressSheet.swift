@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DeliveryAddress: Hashable, Identifiable {
+struct DeliveryAddress: Hashable, Identifiable, Codable {
     var id: UUID = UUID()
     let street: String
     let district: String

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct CreditCard: Identifiable, Hashable {
-    let id = UUID()
+struct CreditCard: Identifiable, Hashable, Codable {
+    var id = UUID()
     let brand: String
     let last4: String
     let expiry: String

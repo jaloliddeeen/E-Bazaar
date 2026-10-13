@@ -34,6 +34,8 @@ struct HomeView: View {
     
     @Binding var selectedTab: Int
     
+    @EnvironmentObject var router: AppRouter
+    
     let categories = [
         ProductCategory(name: "Books", emoji: "📚"),
         ProductCategory(name: "Home", emoji: "🏠"),
@@ -136,17 +138,26 @@ struct HomeView: View {
     private var categoriesGrid: some View {
         LazyVGrid(columns: categoryColumns, spacing: 20) {
             ForEach(categories) { category in
-                VStack(spacing: 8) {
-                    Text(category.emoji)
-                        .font(.system(size: 32))
-                        .frame(width: 70, height: 70)
-                        .background(Color(.systemGray6), in: Circle())
-                    
-                    Text(category.name)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
+                Button {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                            router.selectedCategoryName = category.name
+                            selectedTab = 1
+                        }
+                } label: {
+                    VStack(spacing: 8) {
+                        Text(category.emoji)
+                            .font(.system(size: 32))
+                            .frame(width: 70, height: 70)
+                            .background(Color(.systemGray6), in: Circle())
+                        
+                        Text(category.name)
+                            .font(.body)
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2)
+                    }
                 }
+                .buttonStyle(BouncyButtonStyle())
             }
         }
         .padding(.horizontal)
@@ -346,6 +357,14 @@ struct MainTabView: View {
         .environmentObject(cart)
         .environmentObject(wishlist)
         
+    }
+}
+
+struct BouncyButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
+            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 
-struct ChatConversation: Identifiable, Hashable {
+struct ChatConversation: Identifiable, Hashable, Codable {
     var id: String { storeName }
     let storeName: String
     let storeAvatar: String
@@ -19,8 +19,8 @@ struct ChatConversation: Identifiable, Hashable {
     var messages: [ChatMessage] = []
 }
 
-struct ChatMessage: Identifiable, Hashable {
-    let id = UUID()
+struct ChatMessage: Identifiable, Hashable, Codable {
+    var id = UUID()
     let senderName: String
     let text: String
     let isFromUser: Bool

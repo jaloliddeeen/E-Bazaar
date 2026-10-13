@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PaymentCard: Hashable {
+struct PaymentCard: Hashable, Codable {
     let cardNumber: String
     let expirationDate: String
     let cvc: String
